@@ -73,6 +73,39 @@ app.post("/api/students", (req, res) => {
   res.status(201).json(newStudent);
 });
 
+app.put("/api/students/:id", (req, res) => {
+  const student = students.find(s => s.id === parseInt(req.params.id));
+
+  if (!student) {
+    return res.status(404).json({
+      message: "Not found"
+    });
+  }
+
+  student.name = req.body.name ?? student.name;
+  student.age = req.body.age ?? student.age;
+
+  res.json(student);
+});
+
+app.delete("/api/students/:id", (req, res) => {
+  const index = students.findIndex(
+    s => s.id === parseInt(req.params.id)
+  );
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Not found"
+    });
+  }
+
+  students.splice(index, 1);
+
+  res.json({
+    message: "Student deleted"
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
