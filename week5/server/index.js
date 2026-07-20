@@ -1,5 +1,8 @@
 const express = require("express");
 const app = express();
+
+app.use(express.json());
+
 const PORT = 3000;
 
 // Home route
@@ -25,6 +28,14 @@ app.get("/students/:id", (req, res) => {
 // Query parameter
 app.get("/search", (req, res) => {
   res.send(`Searching for: ${req.query.name}`);
+});
+
+app.get("/api/student", (req, res) => {
+  res.json({
+    name: "Ali",
+    age: 21,
+    isStudent: true
+  });
 });
 
 app.listen(PORT, () => {
