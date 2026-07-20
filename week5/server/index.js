@@ -5,6 +5,11 @@ app.use(express.json());
 
 const PORT = 3000;
 
+let students = [
+  { id: 1, name: "Ali", age: 21 },
+  { id: 2, name: "Sara", age: 20 },
+];
+
 // Home route
 app.get("/", (req, res) => {
   res.send("Hello from my first server!");
@@ -36,6 +41,36 @@ app.get("/api/student", (req, res) => {
     age: 21,
     isStudent: true
   });
+});
+
+app.get("/api/students", (req, res) => {
+  res.json(students);
+});
+
+app.get("/api/students/:id", (req, res) => {
+  const student = students.find(
+    s => s.id === parseInt(req.params.id)
+  );
+
+  if (!student) {
+    return res.status(404).json({
+      message: "Not found"
+    });
+  }
+
+  res.json(student);
+});
+
+app.post("/api/students", (req, res) => {
+  const newStudent = {
+    id: students.length + 1,
+    name: req.body.name,
+    age: req.body.age,
+  };
+
+  students.push(newStudent);
+
+  res.status(201).json(newStudent);
 });
 
 app.listen(PORT, () => {
