@@ -2,7 +2,10 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
 const Student = require("./models/Student");
+const User = require("./models/User");
 
 const app = express();
 
@@ -49,6 +52,53 @@ app.get("/api/students/:id", async (req, res) => {
   }
 
   res.json(student);
+});
+
+app.put("/api/students/:id", async (req, res) => {
+  const updated = await Student.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+
+  if (!updated) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
+  res.json(updated);
+});
+
+app.delete("/api/students/:id", async (req, res) => {
+  const deleted = await Student.findByIdAndDelete(req.params.id);
+
+  if (!deleted) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
+  res.json({ message: "Deleted successfully" });
+});
+
+app.post("/api/register", async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const newUser = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: hashedPassword,
+    });
+
+    await newUser.save();
+
+    res.status(201).json({
+      message: "User registered successfully",
+    });
+
+  } catch (err) {
+    res.status(400).json({
+      error: err.message,
+    });
+  }
 });
 
 app.listen(process.env.PORT, () => {
