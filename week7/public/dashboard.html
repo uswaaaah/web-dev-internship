@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Student Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <h1>Student Management System</h1>
+    <div class="user-info">
+      <span id="welcomeText">Welcome</span>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="summary-bar" id="summaryBar">Total Students: 0</div>
+
+    <div class="controls">
+      <div class="search-group">
+        <input type="text" id="searchInput" placeholder="Search by name...">
+        <select id="gradeFilter">
+          <option value="">All Grades</option>
+        </select>
+      </div>
+      <button class="add-btn" id="openAddModalBtn">+ Add Student</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th>Grade</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentTableBody">
+        </tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display:none;">No students found. Add one to get started.</div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h2 id="modalTitle">Add Student</h2>
+      <form id="studentForm" novalidate>
+        <input type="hidden" id="studentId">
+
+        <div class="form-group">
+          <label for="nameInput">Name</label>
+          <input type="text" id="nameInput" placeholder="Full name">
+          <div class="error-message" id="nameError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="ageInput">Age</label>
+          <input type="number" id="ageInput" placeholder="Age">
+          <div class="error-message" id="ageError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="emailInput">Email</label>
+          <input type="email" id="emailInput" placeholder="student@example.com">
+          <div class="error-message" id="studentEmailError"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="gradeInput">Grade / Class</label>
+          <input type="text" id="gradeInput" placeholder="e.g. BSCS-3A or 10th Grade">
+          <div class="error-message" id="gradeError"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn cancel-btn" id="cancelModalBtn">Cancel</button>
+          <button type="submit" class="btn" id="saveBtn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
