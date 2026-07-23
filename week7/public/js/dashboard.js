@@ -1,6 +1,5 @@
 const API_BASE = "/api/students";
 
-// ---------- Auth guard ----------
 const username = localStorage.getItem("username");
 if (!username) {
   window.location.href = "login.html";
@@ -12,7 +11,6 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
   window.location.href = "login.html";
 });
 
-// ---------- Elements ----------
 const tableBody = document.getElementById("studentTableBody");
 const emptyState = document.getElementById("emptyState");
 const summaryBar = document.getElementById("summaryBar");
@@ -25,9 +23,8 @@ const studentForm = document.getElementById("studentForm");
 const openAddModalBtn = document.getElementById("openAddModalBtn");
 const cancelModalBtn = document.getElementById("cancelModalBtn");
 
-let allStudents = []; // cache for populating grade filter options
+let allStudents = []; 
 
-// ---------- Fetch & render ----------
 async function fetchStudents() {
   const search = searchInput.value.trim();
   const grade = gradeFilter.value;
@@ -96,22 +93,19 @@ function updateGradeOptions(students) {
   gradeFilter.value = currentValue;
 }
 
-// Basic escaping so student-entered text can't break the page layout
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
   return div.innerHTML;
 }
 
-// ---------- Search / filter ----------
 let searchTimeout;
 searchInput.addEventListener("input", () => {
   clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(fetchStudents, 300); // debounce so it doesn't fire on every keystroke
+  searchTimeout = setTimeout(fetchStudents, 300); 
 });
 gradeFilter.addEventListener("change", fetchStudents);
 
-// ---------- Modal open/close ----------
 function openAddModal() {
   modalTitle.textContent = "Add Student";
   studentForm.reset();
@@ -150,7 +144,6 @@ function clearFormErrors() {
   });
 }
 
-// ---------- Add / Edit submit ----------
 studentForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   clearFormErrors();
@@ -228,5 +221,4 @@ async function deleteStudent(id) {
   }
 }
 
-// ---------- Init ----------
 fetchStudents();
