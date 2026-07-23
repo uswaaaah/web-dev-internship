@@ -33,11 +33,11 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { name, age, email, grade } = req.body;
-    if (!name || !age || !email || !grade) {
+    const { name, age, email, phoneNumber, grade } = req.body;
+    if (!name || !age || !email || !phoneNumber || !grade) {
       return res.status(400).json({ message: "All fields are required." });
     }
-    const newStudent = new Student({ name, age, email, grade });
+    const newStudent = new Student({name, age, email, phoneNumber, grade,});
     await newStudent.save();
     res.status(201).json(newStudent);
   } catch (err) {

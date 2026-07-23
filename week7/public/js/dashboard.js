@@ -25,6 +25,24 @@ const cancelModalBtn = document.getElementById("cancelModalBtn");
 
 let allStudents = []; 
 
+function showToast(message, isError = false) {
+  const toast = document.getElementById("toast");
+
+  toast.textContent = message;
+
+  if (isError) {
+    toast.classList.add("error");
+  } else {
+    toast.classList.remove("error");
+  }
+
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+
 async function fetchStudents() {
   const search = searchInput.value.trim();
   const grade = gradeFilter.value;
@@ -62,6 +80,7 @@ function renderTable(students) {
       <td>${escapeHtml(student.name)}</td>
       <td>${escapeHtml(String(student.age))}</td>
       <td>${escapeHtml(student.email)}</td>
+      <td>${escapeHtml(student.phoneNumber)}</td>
       <td>${escapeHtml(student.grade)}</td>
       <td>
         <button class="action-btn edit-btn" data-id="${student._id}">Edit</button>
@@ -123,6 +142,7 @@ function openEditModal(id) {
   document.getElementById("nameInput").value = student.name;
   document.getElementById("ageInput").value = student.age;
   document.getElementById("emailInput").value = student.email;
+  document.getElementById("phoneInput").value = student.phoneNumber;
   document.getElementById("gradeInput").value = student.grade;
   clearFormErrors();
   modalOverlay.classList.add("active");
@@ -139,7 +159,7 @@ modalOverlay.addEventListener("click", (e) => {
 });
 
 function clearFormErrors() {
-  ["nameError", "ageError", "studentEmailError", "gradeError"].forEach((id) => {
+  ["nameError", "ageError", "studentEmailError", "phoneError", "gradeError"].forEach((id) => {
     document.getElementById(id).textContent = "";
   });
 }
@@ -152,6 +172,7 @@ studentForm.addEventListener("submit", async (e) => {
   const name = document.getElementById("nameInput").value.trim();
   const age = document.getElementById("ageInput").value;
   const email = document.getElementById("emailInput").value.trim();
+  const phoneNumber = document.getElementById("phoneInput").value.trim();
   const grade = document.getElementById("gradeInput").value.trim();
 
   let hasError = false;
@@ -167,13 +188,17 @@ studentForm.addEventListener("submit", async (e) => {
     document.getElementById("studentEmailError").textContent = "Enter a valid email address.";
     hasError = true;
   }
+  if (!/^03\d{9}$/.test(phoneNumber)) {
+    document.getElementById("phoneError").textContent = "Enter a valid phone number.";
+    hasError = true;
+  }
   if (grade.length < 1) {
     document.getElementById("gradeError").textContent = "Grade/class is required.";
     hasError = true;
   }
   if (hasError) return;
 
-  const payload = { name, age: Number(age), email, grade };
+  const payload = { name, age: Number(age), email, phoneNumber, grade };
 
   try {
     let res;
@@ -193,14 +218,15 @@ studentForm.addEventListener("submit", async (e) => {
 
     if (!res.ok) {
       const data = await res.json();
-      alert(data.message || "Something went wrong saving the student.");
+      showToast(data.message || "Something went wrong saving the student.", true);
       return;
     }
 
     closeModal();
     fetchStudents();
+    showToast("Student saved successfully!");
   } catch (err) {
-    alert("Could not connect to server.");
+    showToast("Could not connect to server.", true);
   }
 });
 
@@ -216,6 +242,7 @@ async function deleteStudent(id) {
       return;
     }
     fetchStudents();
+    showToast("Student deleted successfully!");
   } catch (err) {
     alert("Could not connect to server.");
   }

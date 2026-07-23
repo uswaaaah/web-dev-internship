@@ -36,6 +36,7 @@
             <th>Name</th>
             <th>Age</th>
             <th>Email</th>
+            <th>Phone</th>
             <th>Grade</th>
             <th>Actions</th>
           </tr>
@@ -72,6 +73,12 @@
         </div>
 
         <div class="form-group">
+          <label for="phoneInput">Phone Number</label>
+          <input type="text" id="phoneInput" placeholder="03XXXXXXXXX">
+    <div class="error-message" id="phoneError"></div>
+        </div>
+
+        <div class="form-group">
           <label for="gradeInput">Grade / Class</label>
           <input type="text" id="gradeInput" placeholder="e.g. A - D">
           <div class="error-message" id="gradeError"></div>
@@ -84,6 +91,8 @@
       </form>
     </div>
   </div>
+
+  <div id="toast" class="toast"></div>
 
   <script src="js/dashboard.js"></script>
 </body>
